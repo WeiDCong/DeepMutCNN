@@ -1,4 +1,5 @@
 import datetime
+from pathlib import Path
 import pandas as pd
 import numpy as np
 
@@ -61,7 +62,8 @@ def train_model(model, X_train, X_val, y_train, y_val, params):
 
     print(f'Train Loss: {train_loss[0]:.3f} | PCC: {train_loss[1]:.3f}')
     print(f'Val Loss: {val_loss[0]:.3f} | PCC: {val_loss[1]:.3f}')
-
+    dir_path = Path('./models')
+    dir_path.mkdir(exist_ok=True)
     model.save(f"./models/{params['save_model']}")
 
     end_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -192,6 +194,8 @@ def save_predictions(model, params):
         'prediction': preds,
     })
     file_name = params.dms_file.split("/")[-1].replace('.csv', '_pred.csv')
+    dir_path = Path('./results')
+    dir_path.mkdir(exist_ok=True)
     save_preds.to_csv(f'./results/{file_name}', index=False)
 
     return save_preds
