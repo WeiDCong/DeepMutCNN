@@ -10,7 +10,7 @@ from tensorflow.keras.layers import Conv1D, BatchNormalization, MaxPooling1D, Dr
 def build_model(params):
     input_shape = params['input_shape']
     model = Sequential()
-    if params['model'] == 'default':
+    if params['mode'] == 'default':
         model.add(Conv1D(filters=32, kernel_size=7, activation='relu', input_shape=input_shape))
         model.add(BatchNormalization())
         model.add(Conv1D(filters=64, kernel_size=7, padding='same', activation='relu'))
@@ -22,7 +22,7 @@ def build_model(params):
         model.add(Flatten())
         model.add(Dense(128, activation='relu'))
         model.add(Dense(1, activation='linear'))
-    else:
+    elif params['mode'] == 'hyperopt':
         best_params = params['hyperopt']
         model.add(Conv1D(
             filters=best_params['filter_0'], 

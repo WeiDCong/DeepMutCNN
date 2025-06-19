@@ -4,11 +4,11 @@ import datetime
 
 from sklearn.model_selection import train_test_split
 
-from utils import set_seeds
-from utils import PCC, PCC_RMSE
-from utils import read_data
+from utility import set_seeds
+from utility import PCC, PCC_RMSE
+from utility import read_data
 from model import build_model
-from train import train_model, hyper_search, evaluate_model, save_preictions
+from train import train_model, hyper_search, evaluate_model, save_predictions, inference
 
 
 def get_params(args):
@@ -19,11 +19,11 @@ def get_params(args):
         'epoch': 120,
         'save_model': model_name
     }
-    if args.model == 'default':
-        params['model'] = 'default'
+    if args.mode == 'default':
+        params['mode'] = 'default'
         params['lr'] = 1e-4    
     else:
-        params['model'] = 'hyperopt'
+        params['mode'] = 'hyperopt'
     
     return params
 
@@ -41,16 +41,20 @@ if __name__ == '__main__':
                         required=True,
                         help="path to your DMS data file",
                         type=str)
-    parser.add_argument("--model",
-                        choices=['default', 'hyperopt'],
+    parser.add_argument("--mode",
+                        choices=['default', 'hyperopt', 'inference'],
                         default="default",
-                        help="default: using default model setup; hyperopt: search for optimal model setup",
+                        help="default: using default model setup; hyperopt: search for optimal model setup; inference: using existing model to make predictions",
+                        type=str)
+    parser.add_argument("--model_file",
+                        default=None,
+                        help="path to the saved CNN model",
                         type=str)
     
     args = parser.parse_args()
     set_seeds(42)
 
-    if args.model == 'default':
+    if args.mode == 'default':
         train_enc_var, train_score, test_enc_var, test_score = read_data(
             args.dms_file, 
             args.seq, 
@@ -66,8 +70,8 @@ if __name__ == '__main__':
         model = build_model(params)
         model = train_model(model, train_enc_var, val_enc_var, train_score, val_score, params)
         evaluate_model(model, test_enc_var, test_score)
-        save_preictions(model, args)
-    elif args.model == 'hyperopt':
+        preds = save_predictions(model, args)
+    elif args.mode == 'hyperopt':
         train_enc_var, train_score, test_enc_var, test_score = read_data(
             args.dms_file, 
             args.seq, 
@@ -84,8 +88,11 @@ if __name__ == '__main__':
         model = build_model(params)
         model = train_model(model, train_enc_var, val_enc_var, train_score, val_score, params)
         evaluate_model(model, test_enc_var, test_score)
-        save_preictions(model, args)
+        preds = save_predictions(model, args)
+    elif args.mode == 'inference':
+        if args.model_file is not None:
+            inference(args)
     else:
-        raise ValueError('Invalid model parameters!')
+        raise ValueError('Invalid mode parameters!')
     
     

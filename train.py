@@ -7,13 +7,13 @@ from sklearn.model_selection import KFold
 
 import tensorflow as tf
 from tensorflow.keras.callbacks import EarlyStopping
-from tensorflow.keras import Sequential, optimizers
+from tensorflow.keras import Sequential, optimizers, models
 from tensorflow.keras.layers import Conv1D, BatchNormalization, MaxPooling1D, Dropout, Flatten, Dense
 
-from utils import set_seeds
-from utils import PCC_RMSE, PCC
-from utils import get_metrics
-from utils import sequence_encoding
+from utility import set_seeds
+from utility import PCC_RMSE, PCC
+from utility import get_metrics
+from utility import sequence_encoding
 
 def train_model(model, X_train, X_val, y_train, y_val, params):
     start_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -178,7 +178,7 @@ def evaluate_model(model, X_test, y_test):
     rmse, rp, rs = get_metrics(y_true, y_pred)
     print(f'\nRMSE: {rmse:.3f}, Rp:{rp:.3f}, Rs:{rs:.3f}\n')
 
-def save_preictions(model, params):
+def save_predictions(model, params):
     raw_data = pd.read_csv(params.dms_file)
     mutants = raw_data['mutant'].to_list()
     scores = raw_data['score'].to_list()
@@ -193,4 +193,16 @@ def save_preictions(model, params):
     })
     file_name = params.dms_file.split("/")[-1].replace('.csv', '_pred.csv')
     save_preds.to_csv(f'./results/{file_name}', index=False)
+
+    return save_preds
+
+def inference(params):
+    custom_objects = {
+        'PCC_RMSE': PCC_RMSE,
+        'PCC': PCC,
+    }
+    model = models.load_model(params.model_file, custom_objects=custom_objects)
+    preds = save_predictions(model, params)
+    print(preds)
+
 
