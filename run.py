@@ -21,7 +21,7 @@ def get_params(args):
     }
     if args.mode == 'default':
         params['mode'] = 'default'
-        params['lr'] = 1e-4    
+        params['lr'] = 1e-5    
     else:
         params['mode'] = 'hyperopt'
     
