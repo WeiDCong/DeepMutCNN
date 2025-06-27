@@ -15,8 +15,8 @@ def get_params(args):
     model_name = args.dms_file.split("/")[-1].replace('csv', 'h5')
     params = {
         'batch_size': 32,
-        'patience': 25,
-        'epoch': 120,
+        'patience': 35,
+        'epoch': 140,
         'save_model': model_name
     }
     if args.mode == 'default':
