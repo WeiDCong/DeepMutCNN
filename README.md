@@ -5,7 +5,7 @@ This repository is a supplement to our paper:
 
 <img src='image.png' width='600' height='auto'>
  
-## Environment Setup
+## Environment setup
 This code is based on Python 3.6 and TensorFlow 2.5.0. 
 Use the provided [environment.yml](environment.yml) file to set up an environment.
 
