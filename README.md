@@ -1,7 +1,7 @@
 # CNN models for deep mutational scanning data
 
 This repository is a supplement to our paper:  
-[Machine Learning on the Impacts of Mutations in the SARS-CoV-2 Spike RBD on Binding Affinity to Human ACE2 based on Deep Mutational Scanning Data]([https://pubs.acs.org/doi/10.1021/acs.biochem.4c00587]).
+[Machine Learning on the Impacts of Mutations in the SARS-CoV-2 Spike RBD on Binding Affinity to Human ACE2 based on Deep Mutational Scanning Data](https://pubs.acs.org/doi/10.1021/acs.biochem.4c00587).
 
 <img src='image.png' width='600' height='auto'>
  
