@@ -1,4 +1,4 @@
-name: cnn4dms
+name: deepmut
 dependencies:
   - cudatoolkit=11.2.2
   - cudnn=8.1.0.77
